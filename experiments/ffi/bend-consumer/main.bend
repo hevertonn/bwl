@@ -13,9 +13,9 @@ def Probe.finish() -> IO(Unit):
 # calls a Bend function. The native producer runs on another OS thread.
 def consume_batches(fuel: Nat) -> IO(Unit):
   match fuel:
-    case 0:
+    case 0n:
       IO.pure(Unit, Unit{})
-    case 1 n:
+    case 1n+n:
       do IO<Unit>:
         Probe.consume()
         consume_batches(n)
@@ -23,5 +23,5 @@ def consume_batches(fuel: Nat) -> IO(Unit):
 def main() -> IO(Unit):
   do IO<Unit>:
     Probe.start()
-    consume_batches(1024)
+    consume_batches(1024n)
     Probe.finish()
