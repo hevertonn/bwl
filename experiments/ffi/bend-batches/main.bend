@@ -3,14 +3,14 @@ import Base
 def Probe.start() -> IO(Unit):
   import "./adapter.c"
 
-def Probe.batch() -> IO(List(U32)):
+def Probe.batch() -> IO(List<U32>):
   import "./adapter.c"
 
 def Probe.finish(sum: U32) -> IO(Unit):
   import "./adapter.c"
 
 # Processing happens in Bend, not in the native adapter.
-def sum_events(xs: List(U32), acc: U32) -> U32:
+def sum_events(xs: List<U32>, acc: U32) -> U32:
   match xs:
     case Nil{}:
       acc
@@ -23,7 +23,7 @@ def consume(fuel: Nat, total: U32) -> IO(U32):
       IO.pure(U32, total)
     case 1n+rest:
       do IO<U32>:
-        events : List(U32) <- Probe.batch()
+        events : List<U32> <- Probe.batch()
         next : U32 = sum_events(events, total)
         consume(rest, next)
 
