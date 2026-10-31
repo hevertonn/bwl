@@ -87,7 +87,9 @@ pub extern "C" fn bwl_bench_consume() {
     let s = shared();
     let mut state = s.state.lock().unwrap();
 
-    while state.events.is_empty() && !state.finished {
+    // Avoid waking Bend for undersized batches while the producer is active.
+    // This guarantees at most ceil(EVENTS / BATCH) nonempty consumes.
+    while state.events.len() < BATCH && !state.finished {
         let (next, _) = s.available
             .wait_timeout(state, Duration::from_millis(25))
             .unwrap();
