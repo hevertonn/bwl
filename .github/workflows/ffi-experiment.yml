@@ -1,0 +1,42 @@
+name: Rust Bend 2 FFI feasibility
+on:
+  push:
+    branches:
+      - experiment/rust-bend-ffi
+  workflow_dispatch:
+
+jobs:
+  validate:
+    if: github.ref == 'refs/heads/experiment/rust-bend-ffi'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      BEND_NO_TELEMETRY: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install system prerequisites
+        run: sudo apt-get update && sudo apt-get install -y clang binutils build-essential
+      - name: Install Bend 2
+        shell: bash
+        run: |
+          curl -fsSL https://bend-lang.com/install.sh -o /tmp/bend-install.sh
+          sh /tmp/bend-install.sh
+          echo "$HOME/.bend/bin" >> "$GITHUB_PATH"
+      - name: Toolchain versions
+        run: |
+          rustc --version
+          cargo --version
+          clang --version
+          bend version
+      - name: Execute reference and Bend probes
+        shell: bash
+        run: bash experiments/ffi/scripts/validate.sh
+      - name: Upload diagnostic reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffi-feasibility-report
+          path: experiments/ffi/out/
+          if-no-files-found: warn
