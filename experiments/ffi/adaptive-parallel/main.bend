@@ -3,7 +3,7 @@ import Base
 def Probe.start() -> IO(Unit):
   import "./adapter.c"
 
-def Probe.take() -> IO<List<U32>>:
+def Probe.take() -> IO(List<U32>):
   import "./adapter.c"
 
 def Probe.finish(checksum: U32) -> IO(Unit):
