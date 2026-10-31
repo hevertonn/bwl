@@ -18,12 +18,12 @@ def sum(xs: List<U32>, acc: U32) -> U32:
     case Con{value, tail}:
       sum(tail, (acc + value : U32))
 
-def process(fuel: Nat, checksum: U32) -> IO<U32>:
+def process(fuel: Nat, checksum: U32) -> IO(U32):
   match fuel:
     case 0n:
       IO.pure(U32, checksum)
     case 1n+rest:
-      do IO<U32>:
+      do IO(U32):
         batch : List<U32> <- Probe.take()
         process(rest, sum(batch, checksum))
 
