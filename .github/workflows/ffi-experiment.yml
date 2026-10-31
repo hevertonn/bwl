@@ -40,6 +40,15 @@ jobs:
         run: bash experiments/ffi/event-queue/test.sh
       - name: Benchmark concurrent Bend-driven queue consumption
         run: bash experiments/ffi/bend-consumer/test.sh
+      - name: Transfer real event values into Bend and process them
+        run: bash experiments/ffi/bend-events/test.sh
+      - name: Upload Bend value-transfer benchmark
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bend-value-transfer-benchmark
+          path: experiments/ffi/bend-events/out/
+          if-no-files-found: warn
       - name: Upload Bend consumer benchmark
         if: always()
         uses: actions/upload-artifact@v4
