@@ -36,6 +36,15 @@ jobs:
       - name: Probe native Bend to Rust effect
         shell: bash
         run: bash experiments/ffi/bend-to-rust/test.sh
+      - name: Benchmark bounded Rust event queue and ABI
+        run: bash experiments/ffi/event-queue/test.sh
+      - name: Upload event queue benchmark
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: event-queue-benchmark
+          path: experiments/ffi/event-queue/out/
+          if-no-files-found: warn
       - name: Upload diagnostic reports
         if: always()
         uses: actions/upload-artifact@v4
