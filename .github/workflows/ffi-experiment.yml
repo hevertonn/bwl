@@ -44,6 +44,15 @@ jobs:
         run: bash experiments/ffi/bend-events/test.sh
       - name: Benchmark Bend-side batches (16, 64, 256)
         run: bash experiments/ffi/bend-batches/test.sh
+      - name: Test adaptive priority queue with concurrent Rust producers and Bend processing
+        run: bash experiments/ffi/adaptive-parallel/test.sh
+      - name: Upload adaptive queue results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: adaptive-queue-results
+          path: experiments/ffi/adaptive-parallel/out/
+          if-no-files-found: warn
       - name: Upload Bend batch benchmark
         if: always()
         uses: actions/upload-artifact@v4
